@@ -1,0 +1,315 @@
+* git
+
+** 為你自己學 Git
+*** 使用者設定
+
+#+BEGIN_SRC bash
+
+$ git config --global user.name "Eddie Kao"
+
+$ git config --global user.email "eddie@5xruby.tw"
+
+$ git config --list
+user.name=Eddie Kao
+user.email=eddie@5xruby.tw
+#+END_SRC
+
+*** 設定檔的位置
+檔案: ~/.gitconfig
+
+*** 【狀況題】可以每個專案設定不同的作者嗎?
+
+#+BEGIN_SRC bash
+
+$ git config --local user.name Sherly
+
+$ git config --local user.email sherly@5xruby.tw
+
+#+END_SRC
+
+*** 更換編輯器
+#+BEGIN_SRC bash
+
+$ git config --global core.editor emacs
+
+#+END_SRC
+
+*** Git 裡設定一些「縮寫」
+
+#+BEGIN_SRC bash
+
+$ git config --global alias.co checkout
+
+$ git config --global alias.br branch
+
+$ git config --global alias.st status
+
+#+END_SRC
+
+可以再加一些參數進去 ex: git log --oneline --graph
+#+BEGIN_SRC bash
+
+$ git config --global alias.l "log --oneline --graph"
+
+$ git config --global alias.ls 'log --graph --pretty=format:"%h <%an> %ar %s"'
+
+$ git log --oneline --graph
+
+$ git log --graph --pretty=format:"%h <%an> %ar %s"
+
+#+END_SRC
+
+*** 新增、初始 Repository
+
+#+BEGIN_SRC bash
+
+$ mkdir git-practice# 建立 git-practice 目錄
+
+$ cd git-practice# 切換至 git-practice 目錄
+
+$ git init# 初始化這個目錄,讓 Git 對這個目錄開始進行版控
+Initialized empty Git repository in /private/tmp/git-practice/.git/
+
+#+END_SRC
+
+#+BEGIN_SRC bash
+
+$ git status
+On branch master
+Initial commit
+nothing to commit (create/copy files and use "git add" to track)
+
+#+END_SRC
+
+#+BEGIN_SRC bash
+
+$ echo "hello, git" > welcome.html
+
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	welcome.html
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+#+END_SRC
+
+一次只加一個檔案
+
+#+BEGIN_SRC bash
+
+$ git add welcome.html
+
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   welcome.html
+
+#+END_SRC
+
+可以使用萬用字元,可把所有附檔名是 html 的檔案全部都加到暫存區。
+
+#+BEGIN_SRC bash
+
+$ git add *.html
+
+#+END_SRC
+
+如果想要一口氣把全部的檔案加到暫存區,可直接使用 --all 參數:
+
+#+BEGIN_SRC bash
+
+$ git add --all
+
+#+END_SRC
+
+*** 【狀況題】如果在git add之後又修改了那個檔案的內容?
+
+1. 你新增了一個檔案叫做 abc.txt 。
+2. 然後,執行 git add abc.txt 把檔案加至暫存區。
+3. 接著編輯 abc.txt 檔案。
+
+#+BEGIN_SRC bash
+
+$ git status
+On branch master
+Changes to be committed:
+	(use "git reset HEAD <file>..." to unstage)
+
+		new file:	abc.txt
+
+Changes not staged for commit:
+	(use "git add <file>..." to update what will be committed)
+	(use "git checkout -- <file>..." to discard changes in working directory)
+
+		modified:	abc.txt
+
+#+END_SRC
+
+*** 【冷知識】"--all" 跟 "." 參數有什麼不一樣?
+1. Git 版本
+在 git 1.x版的時候
+
+| 使用參數 | 新增檔案 | 修改檔案 | 刪除檔案 |
+| --all    | O        | O        | O        |
+| .        | O        | O        | X        |
+
+在 git 2.x版的時候
+
+| 使用參數 | 新增檔案 | 修改檔案 | 刪除檔案 |
+| --all    | O        | O        | O        |
+| .        | O        | O        | O        |
+
+2. 執行指令時候的目錄位置
+git add . 這個指令會把目前當下這個目錄,以及它的子目錄、子子目錄、子子子目
+錄...裡的異動全部加到暫存區,但在這個目錄的以外的就不歸它管了。
+
+git add --all 指令
+就沒這個問題,這個指令不管在專案的哪一層目錄執行,效果都是一樣的,在這個專案裡所有
+的異動都會被加至暫存區。
+
+答案會跟所使用的 Git 版本不同以及執行指令時的目錄而有所差異。
+
+*** 把暫存區的內容提交到倉庫裡存檔
+
+#+BEGIN_SRC bash
+
+$ git commit -m "init commit"
+[master (root-commit) dfccf0c] init commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 welcome.html
+
+#+END_SRC
+
+*** 【冷知識】一定要有東⻄才能 Commit 嗎?
+
+只要加上 --allow-empty 參數,沒東⻄也是可以 Commit 的:
+
+#+BEGIN_SRC bash
+
+$ git commit --allow-empty -m "空的"
+[master 76a5b84] 空的
+
+$ git commit --allow-empty -m "空的"
+[master f4f568c] 空的
+
+$ git commit --allow-empty -m "空的"
+[master 7653117] 空的
+
+#+END_SRC
+
+*** 工作區、暫存區與儲存庫
+
+1. git add 指令把檔案從工作目錄移至暫存區(或索引)。
+2. git commit 指令把暫存區的內容移至儲存庫。
+
+**** 一定要二段式嗎?
+
+#+BEGIN_SRC bash
+
+$ git commit -a -m "update content"
+
+#+END_SRC
+
+*** 檢視紀錄
+
+#+BEGIN_SRC bash
+
+$ git log
+commit 82603ed32d877a1cc1c022ed48d2c69b2bc892cd (HEAD -> master)
+Author: Ray Kuo <ray20140811@gmail.com>
+Date:   Sat Sep 17 01:38:26 2022 +0800
+
+    create index page
+
+commit 36f407ffdf5d63a3b5cdd36d92c3e665033b1aa4
+Author: Ray Kuo <ray20140811@gmail.com>
+Date:   Fri Sep 16 16:58:21 2022 +0800
+
+    init commit
+
+#+END_SRC
+
+*** git log參數
+#+BEGIN_SRC bash
+
+$ git log --oneline --graph
+\* 82603ed (HEAD -> master) create index page
+\* 36f407f init commit
+
+#+END_SRC
+
+*** 【狀況題】我想要找某個人或某些人的 Commit...
+
+**** 找一位叫做 Sherly 的作者的 Commit
+
+#+BEGIN_SRC bash
+
+$ git log --oneline --author="Sherly"
+930feb3 add pig
+51d54ff add lion and tiger
+
+#+END_SRC
+
+**** 可以用|來查詢兩個人的紀錄
+
+#+BEGIN_SRC bash
+
+$ git log --oneline --author="Sherly\|Eddie"
+
+#+END_SRC
+
+*** 【狀況題】我想要找 Commit 訊息裡面有在罵髒話的
+
+#+BEGIN_SRC bash
+
+$ git log --oneline --grep="WTF"
+
+#+END_SRC
+
+#+BEGIN_SRC bash
+#+END_SRC
+
+
+** 你知道的 Git 和我知道的是同一件事嗎？
+   https://www.youtube.com/watch?v=j72-2ktvZV4
+
+
+** 你知道 Git 是怎麼一回事嗎
+   https://www.youtube.com/watch?v=LgTf7m5B0xA
+   - git add . 和 git add --all 這兩個指令有什麽不一樣？
+
+   在 git 1.x版的時候
+   | 使用參數 | 新增檔案 | 修改檔案 | 刪除檔案 |
+   | -------  | -------  | -------  | ------   |
+   | --all    | O        | O        | O        |
+   | .        | O        | O        | X        |
+
+   在 git 2.x版的時候
+   | 使用參數 | 新增檔案 | 修改檔案 | 刪除檔案 |
+   | -------- | -------- | -------- | -------- |
+   | --all    | O        | O        | O        |
+   | .        | O        | O        | O        |
+
+   git add --all指令不管在專案的哪一層目錄執行都有效果
+
+
+#+BEGIN_SRC bash
+#+END_SRC
+
+#+BEGIN_SRC bash
+#+END_SRC
+
+* Emacs
+
+** [[https://orgmode.org][Org Mode]]
+
+** [[https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html][Org-mode 简明手册]]
