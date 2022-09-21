@@ -314,8 +314,9 @@ $ git log --oneline --grep="WTF"
 ** Emacs筆記
 
 | M-g g | goto-line     | 跳到指定行號      |
+| M-d   | kill-word     | delete one word   |
+| C-w   | kill-region   | delete one line   |
 | M-w   | easy-kill     | copy              |
-| C-w   | kill-region   | delete            |
 | C-y   | yank          | paste             |
 | M-%   | query-replace | query and replace |
 
@@ -327,6 +328,7 @@ $ git log --oneline --grep="WTF"
 
 
 * rails
+
 ** Ruby on Rails自習手冊
 
 *** 5-2 Active Record
@@ -352,6 +354,7 @@ $ git log --oneline --grep="WTF"
 | Mouse    | mice       |
 | Person   | people     |
 
+
 **** 5-2-2 rails dbconsole
 #+begin_src bash
 $ bin/rails dbconsole
@@ -370,6 +373,7 @@ CREATE TABLE posts(
 class Post < ActiveRecord::Base
 end
 #+end_src
+
 
 **** 5-2-3 rails console
 
@@ -414,6 +418,7 @@ Loading development environment (Rails 7.0.4)
 | ::all         | 回傳Post物件陣列       |
 | #save         | 將物件回寫到資料表     |
 | #destroy      | 刪除資料               |
+
 
 **** 5-2-4 CRUD操作
 + Create - 新增
@@ -467,4 +472,325 @@ post.destroy
 
 # 刪除所有資料
 Post.destroy_all
+#+end_src
+
+
+**** 5-2-5 設定資料庫
+
+  Rails預設的資料庫使用SQLite,若要換到別的資料庫,可以在Config/database.yml
+做設定。
+
+#+begin_src
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  database: db/development.sqlite3
+
+test:
+  <<: *default
+  database: db/test.sqlite3
+
+production:
+  <<: *default
+  database: db/production.sqlite3
+#+end_src
+
+可用的設定:
+
+| 設定     | 功能                                         |
+|----------+----------------------------------------------|
+| adapter  | adapter gem,例如mysql2,sqllite3,postgresql等 |
+| host     | 主機                                         |
+| database | 資料庫名稱                                   |
+| encoding | 資料庫編碼                                   |
+| timeout  | 連線逾時                                     |
+| pool     | 連線數                                       |
+| username | 登入帳號                                     |
+| password | 登入密碼                                     |
+
+資料庫連線的是由adapter gem 提供統一的介面.對一個rails網站抽換別種資料庫時,
+只要修改config/database.yml adapter部份即可.
+
+#+begin_src bash
+rails s -e production
+#+end_src
+
+或者使用RAILS_ENV環境變數:
+#+begin_src bash
+RAILS_ENV=production rails s
+#+end_src
+
+以下是一個MySQL設定的範例:
+#+begin_src
+development:
+  adapter: mysql
+  encoding: utf8
+  database: blog_development
+  pool: 5
+  username: root
+  password:
+  socket: /tmp/mysql.sock
+#+end_src
+
+
+*** 5-3 資料庫遷移
+
+**** 5-3-1 新增遷移檔
+
+#+begin_src
+$ rails g migration modify_posts
+      invoke   active_record
+      create      db/migrate/20141209134930_modify_posts.rb
+#+end_src
+
+編輯剛剛產生的檔案,新增一個整數欄位view_count到posts表:
+
+#+begin_src ruby
+# db/migrate/20141209134930_modify_posts.rb
+class ModifyPosts < ActiveRecord::Migration
+  def change
+    add_column :posts, :view_count, :integer
+  end
+end
+#+end_src
+
+#+begin_src
+$ bin/rake db:migrate
+== TIMESTAMP ModifyPosts: migrating =======================
+-- add_column(:posts, :view_count, :integer)
+  -> 0.0031s
+== TIMESTAMP ModifyPosts: migrated (0.0032s) ==============
+#+end_src
+
+#+begin_src
+$bin/rails dbconsole
+SQLite version 3.37.2 2022-01-06 13:25:41
+Enter ".help" for usage hints.
+sqlite> .schema posts
+CREATE TABLE IF NOT EXISTS "posts"
+ ("id" integer NOT NULL PRIMARY KEY,
+ "title" text DEFAULT NULL,
+ "content" text DEFAULT NULL,
+ "view_count" integer);
+#+end_src
+
+#+begin_src
+sqlite> .tables
+posts                 schema_migrations
+sqlite> .schema schema_migrations
+CREATE TABLE IF NOT EXISTS "schema_migrations"
+   ("version" varchar NOT NULL PRIMARY KEY);
+sqlite> SELECT * FROM schema_migrations;
+20220914161418
+#+end_src
+
+#+begin_src
+$ bin/rake db:migrate:status
+
+database: db/development.sqlite3
+
+ Status   Migration ID    Migration Name
+--------------------------------------------------
+   up     20220914161418  Modify posts
+#+end_src
+
+其中up表示該遷移檔已經執行過,下一次的bin/rake db:migrate並不會執行這個遷移。
+
+我們再新增一個遷移檔,將view_count改為views:
+
+#+begin_src
+$ bin/rails g migration rename_view_count_in_posts
+  invoke   active_record
+  create     db/migrate/20220914162607_rename_view_count_in_posts.rb
+#+end_src
+
+用rename_column重命名:
+
+#+begin_src ruby
+# db/migrate/20220914162607_rename_view_count_in_posts.rb
+class RenameViewCountInPosts < Activerecord::Migration
+  def change
+    rename_column :posts, :view_count, :views
+  end
+end
+#+end_src
+
+再遷移前,再看一次遷移進度中多了一個down的項目,表示目前有尚未執行的遷移檔:
+
+#+begin_src
+$ bin/rake db:migrate:status
+
+database: db/development.sqlite3
+
+ Status   Migration ID    Migration Name
+--------------------------------------------------
+   up     20220914161418  Modify posts
+ down     20220914162312  Add view count in posts
+#+end_src
+
+再遷移一次
+
+#+begin_src
+$ bin/rake db:migrate
+== TIMESTAMP RenameViewCountInPosts: migrating =======================
+-- rename_column(:posts, :view_count, :views)
+  -> 0.0106s
+== TIMESTAMP Renameviewcountinposts: migrated (0.0107s) ==============
+#+end_src
+
+狀態顯示已經沒有任何的擱置的遷移檔:
+
+#+begin_src
+$ bin/rake db:migrate:status
+
+database: db/development.sqlite3
+
+ Status   Migration ID    Migration Name
+--------------------------------------------------
+   up     20220914161418  Modify posts
+   up     20220914162312  Add view count in posts
+   up     20220914162607  Rename view count in posts
+#+end_src
+
+
+**** 5-3-2 版本回滾
+
+若發現遷移的schema不如預期,可以用bin/rake db:rollback回滾到最後一個遷移檔。
+以此例可以從輸出訊息看到原本的view又被改回了view_count:
+
+#+begin_src
+$ bin/rake db:rollback
+== TIMESTAMP RenameViewCountInPosts: reverting =======================
+-- rename_column(:posts, :view_count, :views)
+  -> 0.0117s
+== TIMESTAMP Renameviewcountinposts: reverted (0.0146s) ==============
+#+end_src
+
+可以加上STEP環境變數來控制回滾幾個版本,例如:
+
+#+begin_src
+$ STEP=3 bin/rake db:rollback
+#+end_src
+
+
+**** 5-3-3 遷移指令
+
+| 指令                                     | 說明                                |
+|------------------------------------------+-------------------------------------|
+| add_column(table, column, type)          | 新增欄                              |
+| add_index(table, column)                 | 新增索引,會以table_column_index命名 |
+| add_timestamps(table)                    | 新增created_at和updated_at欄        |
+| change_column(table, column, type)       | 修改欄                              |
+| create_table(table)                      | 新增表                              |
+| drop_table(table)                        | 刪除表                              |
+| remove_column(table, column)             | 刪除欄                              |
+| remove_index(table, column)              | 刪除索引                            |
+| remove_timestamps(table)                 | 刪除created_at與updated_at欄        |
+| rename_column(table, old_name, new_name) | 重新命名欄                          |
+| rename_index(table, old_name, new_name)  | 重新命名索引                        |
+| rename_table(table, new_name)            | 重新命名表                          |
+
+#+begin_src
+# 使該欄位在資料庫不可是NULL,且預設為0
+add_column :posts, :views, :integer, null: false, default:0
+#+end_src
+
+
+**** 5-3-4 change,up與down
+
+上述提到資料庫遷移的管理方式,是藉由多個有序遷移檔的變更與回滾兩個部份的程式碼來控制schema版本。
+而rails遷移檔的使用,則是將這兩部份的程式碼分別寫在#up和#down兩個方法中。事實上,在posts表
+新增view_count欄位的遷移檔可以改寫如下:
+
+#+begin_src ruby
+# db/migrate/20141209134930_modify_posts.rb
+class ModifyPosts < ActiveRecord::Migration
+  # def change
+  #  add_column :posts, :view_count, :integer
+  # end
+
+  # 等同於以下寫法
+  def up
+    add_column :posts, :view_count, :integer
+  end
+
+  def down
+    remove_column :posts, :view_count
+  end
+end
+#+end_src
+
+這也是rails早期版本的寫法,#change是rails後期加入的新功能。有些回滾是可以透過變更的內容去推測出來的。
+
+可被rails自動回滾的指令包括: add_column, add_index, add_timestamps, create_table, create_join_table,
+remove_timestamps, rename_column, rename_index, rename_table。
+
+
+**** 5-3-5 Model產生器
+
+#+begin_src
+$ bin/rails generate model NAME [field[:type] [:index] ...]
+#+end_src
+
+| 參數  | 說明                                  |
+|-------+---------------------------------------|
+| NAME  | model名稱,單數型態;蛇形或駱駝命行皆可 |
+| field | 資料表的欄位名稱                      |
+| type  | 資料型態,預設是string                 |
+| index | 該欄位是否建立索引                    |
+
+支援的資料型態:
+
+| 資料型態    | 說明                                       |
+|-------------+--------------------------------------------|
+| primary_key | 主鍵                                       |
+| string      | 短字串(255)                                |
+| text        | 長字串                                     |
+| integer     | 整數                                       |
+| float       | 浮點數                                     |
+| decimal     | 高精浮點數                                 |
+| datetime    | 時間日期(字串)                             |
+| timestamp   | UNIX時間(數字)                             |
+| time        | 時間                                       |
+| date        | 日期                                       |
+| binary      | 二進位資料                                 |
+| boolean     | 布林值                                     |
+| json        | JSON字串,PostgreSQL專有                    |
+| hstore      | 類似Ruby的Hash,只能使用一層;Postgresql專有 |
+
+#+begin_src
+$ bin/rails g model user name email about:text
+    invoke  active_record
+    create      db/migrate/20141211091418_create_users.rb
+    create      app/models/user.rb
+#+end_src
+
+產生遷移檔並不會改變資料庫,需要再遷移一次:
+
+#+begin_src
+$ bin/rake db:migrate
+== TIMESTAMP CreateUsers: migrating =======================
+-- create_table(:users)
+  -> 0.0035s
+== TIMESTAMP CreateUsers: migrated (0.0035s) ==============
+#+end_src
+
+接著進入rails console,除了Post之外,已有User可使用:
+
+#+begin_src ruby
+User.count # => 0
+user = User.create name: 'tony', email: 'tony@5xruby.tw', about: '嘉義人'
+user.id    # => 1
+User.count # => 1
+user.name  # => "tony"
+#+end_src
+
+
+* Memo
+
+#+begin_src
 #+end_src
