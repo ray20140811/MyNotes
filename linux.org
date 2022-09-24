@@ -1,6 +1,169 @@
-* git
+* Git
+
+** [[https://backlog.com/git-tutorial/tw/][連猴子都能懂的Git入門指南]]
+
+*** 初始設定
+
+Git的設定會被記錄在用戶的目錄首頁下的.gitconfig檔案裡。
+
+#+begin_src
+
+$ git config --global user.name "<使用者名字>"
+
+$ git config --global user.email "<電子信箱>"
+
+#+end_src
+
+可以為Git的命令設定別名，例如：「checkout」可以省略為「co」來執行。
+
+#+begin_src
+
+$ git config --global alias.co checkout
+
+#+end_src
+
+在Windows使用主控台（Git Bash）的話，含有中文的檔名會顯示為 "\346\226\260\350\246..."添加以下的設定，讓含有中文的檔名可以正確顯示。
+
+#+begin_src
+
+$ git config --global core.quotepath off
+
+#+end_src
+
+在提交訊息時要使用中文的話，不要使用 -m 參數，要用外部編輯器來輸入
+
+#+begin_src
+
+git config --global core.editor "emacs"
+
+#+end_src
+
+
+*** 新建數據庫
+
+#+begin_src
+
+$ mkdir tutorial-bare
+
+$ cd tutorial-bare
+
+$ git --bare init
+
+#+end_src
+
+#+begin_src
+
+$ cd ..
+
+$ mkdir tutorial
+
+$ git clone tutorial-bare tutorial
+
+$ cd tutorial
+#+end_src
+
+*** 提交檔案
+
+首先在tutorial目錄裡新添一個名為「sample.txt」的文字檔案。請在檔案裡輸入以下的內容：
+
+連猴子都懂的Git命令
+
+#+begin_src
+
+$ echo "連猴子都懂的Git命令" > sample.txt
+
+#+end_src
+
+在Git管理之下的目錄，可以使用status命令確認工作目錄與索引的狀態喔。
+
+#+begin_src
+
+$ git status
+
+#+end_src
+
+執行status命令確認tutorial目錄的狀態。
+
+#+begin_src
+
+$ git status
+# On branch master
+#
+# Initial commit
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#     sample.txt
+nothing added to commit but untracked files present (use "git add" to track)
+
+#+end_src
+
+要將檔案加入到索引，可以使用add <file>命令。<file>是指向要加入索引的檔案。若要指向多個檔案，可用空白鍵將檔案們分開。
+
+#+begin_src
+
+$ git add sample.txt
+$ git status
+# On branch master
+#
+# Initial commit
+#
+# Changes to be committed:
+#   (use "git rm --cached <file>..." to unstage)
+#
+#     new file:   sample.txt
+#
+
+#+end_src
+
+#+begin_src
+
+$ git commit -m "first commit"
+[master (root-commit) 116a286] first commit
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 sample.txt
+
+$ git status
+# On branch master
+nothing to commit (working directory clean)
+
+#+end_src
+
+#+begin_src
+
+$ git log
+commit ac56e474afbbe1eab9ebce5b3ab48ac4c73ad60e
+Author: eguchi <eguchi@nulab.co.jp>
+Date:   Thu Jul 12 18:00:21 2012 +0900
+
+    first commit
+
+#+end_src
+
+安裝git的同時也會安裝gitk工具。可以用圖形化介面確認歷史提交記錄。
+
+#+begin_src
+
+$ gitk
+
+#+end_src
+
+#+begin_src
+#+end_src
+
+#+begin_src
+#+end_src
+
+#+begin_src
+#+end_src
+
+#+begin_src
+#+end_src
+
 
 ** 為你自己學 Git
+
 *** 使用者設定
 
 #+BEGIN_SRC bash
