@@ -8,56 +8,44 @@
 
 **** 初始設定
 
- Git的設定會被記錄在用戶的目錄首頁下的.gitconfig檔案裡。
+Git的設定會被記錄在用戶的目錄首頁下的.gitconfig檔案裡。
 
- #+begin_src
-
+#+begin_src
  $ git config --global user.name "<使用者名字>"
 
  $ git config --global user.email "<電子信箱>"
-
  #+end_src
 
- 可以為Git的命令設定別名，例如：「checkout」可以省略為「co」來執行。
+可以為Git的命令設定別名，例如：「checkout」可以省略為「co」來執行。
 
- #+begin_src
-
+#+begin_src
  $ git config --global alias.co checkout
-
  #+end_src
 
- 在Windows使用主控台（Git Bash）的話，含有中文的檔名會顯示為 "\346\226\260\350\246..."添加以下的設定，讓含有中文的檔名可以正確顯示。
+在Windows使用主控台（Git Bash）的話，含有中文的檔名會顯示為 "\346\226\260\350\246..."添加以下的設定，讓含有中文的檔名可以正確顯示。
 
- #+begin_src
-
+#+begin_src
  $ git config --global core.quotepath off
-
  #+end_src
 
- 在提交訊息時要使用中文的話，不要使用 -m 參數，要用外部編輯器來輸入
+在提交訊息時要使用中文的話，不要使用 -m 參數，要用外部編輯器來輸入
 
- #+begin_src
-
- git config --global core.editor "emacs"
-
- #+end_src
-
+#+begin_src
+git config --global core.editor "emacs"
+#+end_src
 
 **** 新建數據庫
 
 在本地端建立新的數據庫。建立一個名稱為「tutorial」的空目錄，把它放在Git的管理之下。
 
 #+begin_src
-
 $ mkdir tutorial
 
 $ cd tutorial
 
 $ git init
 Initialized empty Git repository in /Users/yourname/Desktop/tutorial/.git/
-
 #+end_src
-
 
 **** 提交檔案
 
@@ -66,23 +54,18 @@ Initialized empty Git repository in /Users/yourname/Desktop/tutorial/.git/
 *連猴子都懂的Git命令*
 
 #+begin_src
-
 $ echo "連猴子都懂的Git命令" > sample.txt
-
 #+end_src
 
 在Git管理之下的目錄，可以使用status命令確認工作目錄與索引的狀態喔。
 
 #+begin_src
-
 $ git status
-
 #+end_src
 
 執行status命令確認tutorial目錄的狀態。
 
 #+begin_src
-
 $ git status
 # On branch master
 #
@@ -93,13 +76,11 @@ $ git status
 #
 #     sample.txt
 nothing added to commit but untracked files present (use "git add" to track)
-
 #+end_src
 
 要將檔案加入到索引，可以使用add <file>命令。<file>是指向要加入索引的檔案。若要指向多個檔案，可用空白鍵將檔案們分開。
 
 #+begin_src
-
 $ git add sample.txt
 $ git status
 # On branch master
@@ -111,11 +92,9 @@ $ git status
 #
 #     new file:   sample.txt
 #
-
 #+end_src
 
 #+begin_src
-
 $ git commit -m "first commit"
 [master (root-commit) 116a286] first commit
  0 files changed, 0 insertions(+), 0 deletions(-)
@@ -124,26 +103,21 @@ $ git commit -m "first commit"
 $ git status
 # On branch master
 nothing to commit (working directory clean)
-
 #+end_src
 
 #+begin_src
-
 $ git log
 commit ac56e474afbbe1eab9ebce5b3ab48ac4c73ad60e
 Author: eguchi <eguchi@nulab.co.jp>
 Date:   Thu Jul 12 18:00:21 2012 +0900
 
     first commit
-
 #+end_src
 
 安裝git的同時也會安裝gitk工具。可以用圖形化介面確認歷史提交記錄。
 
 #+begin_src
-
 $ gitk
-
 #+end_src
 
 
@@ -157,11 +131,13 @@ $ gitk
 
 為此，需要在Git執行Push(推送)操作。執行Push之後，本地端的修改歷史會被上傳到遠端數據庫。遠端數據庫的修改歷史就會和本地端數據庫的修改歷史保持同步。
 
+
 ***** Clone(複製)
 
 要下載遠端數據庫需要進行複製（Clone）的操作。
 
 執行複製後，可以把遠端數據庫裡的內容全部下載下來，之後您可以在另一台機器的本地數據庫上進行操作。
+
 
 ***** Pull(拉取)
 
@@ -169,19 +145,19 @@ $ gitk
 
 執行pull之後，會從遠端數據庫下載最新的修改歷史，將其同步到自己的本地端數據庫。
 
+
 *** 教學2 共享數據庫
 
 **** 建立遠端數據庫
 
 #+begin_src
-
 $ mkdir tutorial-bare
 
 $ cd tutorial-bare
 
 $ git --bare init
-
 #+end_src
+
 
 **** Push到遠端數據庫
 
@@ -198,7 +174,6 @@ $ git push <repository> <refspec>...
 #+end_src
 
 #+begin_src
-
 $ git push -u origin master
 Username: <用戶名>
 Password: <密碼>
@@ -207,33 +182,32 @@ Writing objects: 100% (3/3), 245 bytes, done.
 Total 3 (delta 0), reused 0 (delta 0)
 To https://nulab.backlog.jp/git/BLG/tutorial.git
  * [new branch]      master -> master
-
 #+end_src
+
 
 **** 複製遠端數據庫
 
 #+begin_src
-
 $ cd ..
 
 $ git clone tutorial-bare tutorial
 
 $ cd tutorial
-
 #+end_src
 
-若要確認是否作業成功，請到複製的「tutorial2」目錄裡，查看sample.txt有沒有包含以下內容：
-
-連猴子都懂的Git命令
-
 #+begin_src
-
 $ cd ..
 
 $ git clone tutorial-bare tutorial2
 
 $ cd tutorial2
+#+end_src
 
+
+若要確認是否作業成功，請到複製的「tutorial2」目錄裡，查看sample.txt有沒有包含以下內容：
+
+#+begin_src
+連猴子都懂的Git命令
 #+end_src
 
 
@@ -243,40 +217,25 @@ $ cd tutorial2
 
 首先，在上一頁複製（Clone）數據庫目錄裡的sample.txt，增加以下粗體字的部分後再提交。
 
+#+begin_src
 連猴子都懂的Git命令
-add 修改加入書籤
+*add 修改加入書籤*
+#+end_src
 
+#+begin_src
 $ git add sample.txt
 $ git commit -m "添加add的說明"
 [master 1ef5c8c] 添加add的說明
  1 files changed, 1 insertions(+), 1 deletions(-)
+#+end_src
 
+*tutorial2的操作*
 
-
-教學2 共享數據庫
-在複製的本地端數據庫執行push
-
-讓我們來試試看在複製的本地端數據庫執行push吧。
-選擇您使用的電腦系統
-選擇主控台
-主控台
-
-tutorial2的操作
-首先，在上一頁複製（Clone）數據庫目錄裡的sample.txt，增加以下粗體字的部分後再提交。
-
-連猴子都懂的Git命令
-add 修改加入書籤
-
-$ git add sample.txt
-$ git commit -m "添加add的說明"
-[master 1ef5c8c] 添加add的說明
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-tutorial2的操作
 接下來，push這次的修改到遠端數據庫。
 
 在複製的數據庫裡執行push命令時，您可以省略數據庫和分支的名稱。
 
+#+begin_src
 $ git push
 Username: <用戶名>
 Password: <密碼>
@@ -287,15 +246,18 @@ Writing objects: 100% (3/3), 351 bytes, done.
 Total 3 (delta 0), reused 0 (delta 0)
 To https://nulab.backlog.jp/git/BLG/tutorial.git
    486789c..1ef5c8c  master -> master
+#+end_src
 
 請打開貝格樂的Git頁面。您可以看到push內容已被添加到「最近的更新」了。
 
 
 **** 從遠端數據庫執行Pull
 
-在tutorial的操作
+*在tutorial的操作*
+
 請執行以下的命令。
 
+#+begin_src
 $ git pull origin master
 Username: <用戶名>
 Password: <密碼>
@@ -305,12 +267,15 @@ Updating ac56e47..3da09c1
 Fast-forward
  sample.txt |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+#+end_src
 
 已經更新sample.txt檔案的內容。
 
-在tutorial的操作
+*在tutorial的操作*
+
 使用log命令確認歷史記錄。
 
+#+begin_src
 $ git log
 commit 3da09c1134a41f2bee854a413916e4ebcae7318d
 Author: eguchi <eguchi@nulab.co.jp>
@@ -323,22 +288,29 @@ Author: eguchi <eguchi@nulab.co.jp>
 Date:   Thu Jul 12 18:00:21 2012 +0900
 
     first commit
+#+end_src
 
 在「tutorial2」新添加的提交現在已被列表在這個數據庫的歷史記錄上。
 
-在tutorial的操作
+*在tutorial的操作*
+
 打開sample.txt檔案確認內容。
 
+#+begin_src
 連猴子都懂的Git命令
 add 修改加入書籤
+#+end_src
 
 我們可以看到內容已添加至「add ：修改加入索引」中。
+
+*** 合併修改記錄
 
 **** 合併修改記錄
 
 您上次的push到執行下一次的push的期間，如果有其他人push更新了遠端數據庫，而您沒有更新您的本地端數據庫，那麼您的push會被拒絕。
 
 這個時候，需要進行合併操作導入其他人的修改歷史，不然push都會被拒絕喔。若沒有合併直接覆蓋歷史記錄的話，其他人push的修改內容（如圖提交C）會消失。
+
 
 **** 解決衝突
 
@@ -353,37 +325,50 @@ add 修改加入書籤
 
 如下圖所示，修改好所有衝突的地方之後，執行提交會提交衝突的合併訊息的提交內容。
 
+
 *** 教學3 合併修改記錄
 
 **** 製造衝突
 
-在tutorial的操作
+*在tutorial的操作*
+
 首先在打開tutorial目錄的sample.txt，修改成以下的內容再提交。
 
+#+begin_src
 連猴子都懂的Git命令
 add 修改加入索引
-commit 記錄索引的狀態
+*commit 記錄索引的狀態*
+#+end_src
 
+#+begin_src
 $ git add sample.txt
 $ git commit -m "添加commit的說明"
 [master 95f15c9] 添加commit的說明
  1 files changed, 1 insertions(+), 0 deletions(-)
+#+end_src
 
-在tutorial2的操作
+*在tutorial2的操作*
+
 接著打開tutorial2目錄的sample.txt，修改成以下的內容再提交。
 
+#+begin_src
 連猴子都懂的Git命令
 add 修改加入索引
-pull 取得遠端數據庫的內容
+*pull 取得遠端數據庫的內容*
+#+end_src
 
+#+begin_src
 $ git add sample.txt
 $ git commit -m "添加pull的說明"
 [master 4c01823] 添加pull的說明
  1 files changed, 1 insertions(+), 0 deletions(-)
+#+end_src
 
-在tutorial2的操作
+*在tutorial2的操作*
+
 直接從tutorial2 push內容到遠端數據庫。
 
+#+begin_src
 $ git push
 Username: <用戶名>
 Password: <密碼>
@@ -394,12 +379,15 @@ Writing objects: 100% (3/3), 391 bytes, done.
 Total 3 (delta 0), reused 0 (delta 0)
 To https://nulab.backlog.jp/git/BLG/tutorial.git
    3da09c1..4c01823  master -> master
+#+end_src
 
 現在，遠端數據庫的第三行即為「pull 取得遠端數據庫的內容」啦。
 
-在tutorial的操作
+*在tutorial的操作*
+
 接下來，從tutorial push提交到遠端數據庫。
 
+#+begin_src
 $ git push
 Username: <用戶名>
 Password: <密碼>
@@ -409,14 +397,17 @@ error: failed to push some refs to 'https://nulab.backlog.jp/git/BLG/tutorial.gi
 To prevent you from losing history, non-fast-forward updates were rejected
 Merge the remote changes (e.g. 'git pull') before pushing again.  See the
 'Note about fast-forwards' section of 'git push --help' for details.
+#+end_src
 
 看到吧，發生錯誤了，push被拒絕(rejected)了。
 
 **** 解決衝突
 
-在tutorial的操作
+*在tutorial的操作*
+
 執行以下的命令。
 
+#+begin_src
 $ git pull origin master
 Username: <用戶名>
 Password: <密碼>
@@ -429,51 +420,62 @@ From https://nulab.backlog.jp/git/BLG/tutorial
 Auto-merging sample.txt
 CONFLICT (content): Merge conflict in sample.txt
 Automatic merge failed; fix conflicts and then commit the result.
+#+end_src
 
 接著，系統會出現合併時發生衝突的警告訊息。
 
-在tutorial的操作
+*在tutorial的操作*
+
 打開sample.txt檔案確認內容，Git將用標示行顯示內容發生衝突的地方，如下圖：
 
+#+begin_src
 連猴子都懂的Git命令
 add 修改加入索引
-<<<<<<< HEAD
-commit 記錄索引的狀態
-=======
-pull 取得遠端數據庫的內容
->>>>>>> 4c0182374230cd6eaa93b30049ef2386264fe12a
+*<<<<<<< HEAD*
+*commit 記錄索引的狀態*
+*=======*
+*pull 取得遠端數據庫的內容*
+*>>>>>>> 4c0182374230cd6eaa93b30049ef2386264fe12a*
+#+end_src
 
-在tutorial的操作
-
-請修改
+*在tutorial的操作*
 
 將衝突的地方進行修改，導入兩方的修改，刪除多餘的標示行。請參考下圖：
 
+#+begin_src
 連猴子都懂的Git命令
 add 修改加入索引
-commit 記錄索引的狀態
-pull 取得遠端數據庫的內容
+*commit 記錄索引的狀態*
+*pull 取得遠端數據庫的內容*
+#+end_src
 
-在tutorial的操作
+*在tutorial的操作*
+
 當修改完內容，解決了檔案的衝突，則需要執行提交。
 
+#+begin_src
 $ git add sample.txt
 $ git commit -m "合併"
 [master d845b81] 合併
+#+end_src
 
 這樣就完成了從遠端數據庫導入最新的修改內容了。
 
-在tutorial的操作
+*在tutorial的操作*
+
 我們可以使用log命令來確認數據庫的修改歷史。若加入 --graph 參數可以圖表方式顯示分支歷史。加入--oneline 簡化輸出訊息，以簡潔方式呈現。
 
+#+begin_src
 $ git log --graph --oneline
 *   d845b81 合併
-|\
+| \
 | * 4c01823 添加pull的說明
+|
 * | 95f15c9 添加commit的說明
 |/
 * 3da09c1 添加add的說明
 * ac56e47 first commit
+#+end_src
 
 這表示兩個修改歷史已經成功合併且建立了新的合併提交。
 
