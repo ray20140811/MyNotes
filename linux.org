@@ -4,7 +4,6 @@
 
 *** Git的基本介紹
 
-
 *** 教學1 開始使用Git
 
 **** 初始設定
@@ -187,16 +186,15 @@ $ git --bare init
 **** Push到遠端數據庫
 
 #+begin_src
-
 $ git remote add <name> <url>
+#+end_src
 
+#+begin_src
 $ git remote add origin https://[your_space_id].backlog.jp/git/[your_project_key]/tutorial.git
 #+end_src
 
 #+begin_src
-
 $ git push <repository> <refspec>...
-
 #+end_src
 
 #+begin_src
@@ -210,9 +208,6 @@ Total 3 (delta 0), reused 0 (delta 0)
 To https://nulab.backlog.jp/git/BLG/tutorial.git
  * [new branch]      master -> master
 
-#+end_src
-
-#+begin_src
 #+end_src
 
 **** 複製遠端數據庫
