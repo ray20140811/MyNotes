@@ -793,17 +793,36 @@ $ git log --oneline --grep="WTF"
 
 * Emacs
 
-** Emacs筆記
+** Basic Command
 
-| M-g g | goto-line     | 跳到指定行號      |
-| M-d   | kill-word     | delete one word   |
-| C-w   | kill-region   | delete one line   |
-| M-w   | easy-kill     | copy              |
-| C-y   | yank          | paste             |
-| M-%   | query-replace | query and replace |
+| Key Binding | Command             | Description       |
+|-------------+---------------------+-------------------|
+| M-g g       | goto-line           | 跳到指定行號      |
+| M-d         | kill-word           | delete one word   |
+| C-w         | kill-region         | delete one line   |
+| C-k         | kill-line           | delete one line   |
+| M-w         | easy-kill           | copy              |
+| C-y         | yank                | paste             |
+| M-%         | query-replace       | query and replace |
+| M-<         | beginning-of-buffer |                   |
+| M->         | end-of-buffer       |                   |
+| C-x <SPC>   | rectangle-mark-mode | 垂直選取          |
+| C-@         | set-mark-command    |                   |
+| C-x r-t     | string-rectangle    |                   |
+| C-(         | kmacro-start-macro  |                   |
+| C-)         | kmacro-end-macro    |                   |
 
 
 ** [[https://orgmode.org][Org Mode]]
+
+| Key Binding | Command                  | Description                       |
+|-------------+--------------------------+-----------------------------------|
+| C-c C-t     | org-todo                 | change the TODO state of an item. |
+| C-c C-s     | org-schedule             | Insert the SCHEDULED.             |
+| C-c C-d     | org-deadline             | Insert the DEADLINE               |
+| C-c [       | org-agenda-file-to-front |                                   |
+|             | org-agenda               |                                   |
+| C-c C-e     | org-export               |                                   |
 
 
 ** [[https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html][Org-mode 简明手册]]
