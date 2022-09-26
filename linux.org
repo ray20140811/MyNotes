@@ -824,6 +824,13 @@ $ git log --oneline --grep="WTF"
 |             | org-agenda               |                                   |
 | C-c C-e     | org-export               |                                   |
 
+*** [[https://emacs.stackexchange.com/questions/4279/exporting-from-org-mode-to-markdown][Exporting from org-mode to markdown]] 
+
+You should customize *org-export-backends* and enable the markdown backend.
+
+*M-x customize-option* and then *org-export-backends* and then arrow down to the checkbox to the left of 'md' and press enter to enable it (or just click on it, if running emacs graphically). Then arrow back up and over to 'Apply and Save' (or click on it).
+
+After customizing, run *M-x org-md-export-to-markdown*. Now you should have a new markdown file in the same directory which is an export of the original org mode file.
 
 ** [[https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html][Org-mode 简明手册]]
 
