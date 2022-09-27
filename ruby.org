@@ -1,0 +1,20 @@
+* C#中有String.Trim()可以去空白,在Ruby有哪一個功能類似?
+  Ruby可以用strip或strip! 其中strip只會返回新(去除空白後)的字串,不會修改原來的字串.
+  strip!不僅會返回新的字串,還會修改原先字串的內容.
+
+  #+begin_src rubyirb(main):001:0>
+  greeting = "  Hello World!  "
+  => "  Hello World!  "
+  irb(main):002:0> another_greeting = greeting.strip
+  => "Hello World!"
+  irb(main):003:0> greeting
+  => "  Hello World!  "
+  irb(main):004:0> another_greeting
+  => "Hello World!"
+  irb(main):005:0> the_other_greeting = greeting.strip!
+  => "Hello World!"
+  irb(main):006:0> greeting
+  => "Hello World!"
+  irb(main):007:0> the_other_greeting
+  => "Hello World!"
+  #+end_src
