@@ -795,23 +795,33 @@ $ git log --oneline --grep="WTF"
 
 ** Basic Command
 
-| Key Binding | Command             | Description       |
-|-------------+---------------------+-------------------|
-| M-g g       | goto-line           | 跳到指定行號      |
-| M-d         | kill-word           | delete one word   |
-| C-w         | kill-region         | delete one line   |
-| C-k         | kill-line           | delete one line   |
-| M-w         | easy-kill           | copy              |
-| C-y         | yank                | paste             |
-| M-%         | query-replace       | query and replace |
-| M-<         | beginning-of-buffer |                   |
-| M->         | end-of-buffer       |                   |
-| C-x <SPC>   | rectangle-mark-mode | 垂直選取          |
-| C-@         | set-mark-command    |                   |
-| C-x r-t     | string-rectangle    |                   |
-| C-(         | kmacro-start-macro  |                   |
-| C-)         | kmacro-end-macro    |                   |
-
+| Key Binding   | Command                    | Description       |
+|---------------+----------------------------+-------------------|
+| F10           | menu-bar-open              |                   |
+|               | windmove-swap-states-up    | 上下視窗交換      |
+|               | windmove-swap-states-down  | 上下視窗交換      |
+|               | windmove-swap-states-right | 左右視窗交換      |
+|               | windmove-swap-states-left  | 左右視窗交換      |
+| C-x C-p       | mark-page                  |                   |
+| C-x h         | mark-whole-buffer          | 全選              |
+| M-g g         | goto-line                  | 跳到指定行號      |
+| S-<UP>/<Down> | org-shiftup                | 單格移動          |
+| M-<UP>/<Down> | org-metaup                 | 單行移動          |
+| M-d           | kill-word                  | delete one word   |
+| C-w           | kill-region                | delete one line   |
+| C-k           | kill-line                  | delete one line   |
+| M-w           | easy-kill                  | copy              |
+| C-y           | yank                       | paste             |
+| M-%           | query-replace              | query and replace |
+| M-<           | beginning-of-buffer        |                   |
+| M->           | end-of-buffer              |                   |
+| C-x <SPC>     | rectangle-mark-mode        | 垂直選取          |
+| C-@           | set-mark-command           |                   |
+| C-x r-t       | string-rectangle           |                   |
+| C-(           | kmacro-start-macro         |                   |
+| C-)           | kmacro-end-macro           |                   |
+| C-x u         | undo                       |                   |
+| C-f C-/       | redo                       |                   |
 
 ** [[https://orgmode.org][Org Mode]]
 
@@ -824,7 +834,7 @@ $ git log --oneline --grep="WTF"
 |             | org-agenda               |                                   |
 | C-c C-e     | org-export               |                                   |
 
-*** [[https://emacs.stackexchange.com/questions/4279/exporting-from-org-mode-to-markdown][Exporting from org-mode to markdown]] 
+*** [[https://emacs.stackexchange.com/questions/4279/exporting-from-org-mode-to-markdown][Exporting from org-mode to markdown]]
 
 You should customize *org-export-backends* and enable the markdown backend.
 
