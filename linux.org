@@ -791,60 +791,6 @@ $ git log --oneline --grep="WTF"
 #+END_SRC
 
 
-* Emacs
-
-** Basic Command
-
-| Key Binding   | Command                    | Description       |
-|---------------+----------------------------+-------------------|
-| F10           | menu-bar-open              |                   |
-|               | windmove-swap-states-up    | 上下視窗交換      |
-|               | windmove-swap-states-down  | 上下視窗交換      |
-|               | windmove-swap-states-right | 左右視窗交換      |
-|               | windmove-swap-states-left  | 左右視窗交換      |
-| C-x C-p       | mark-page                  |                   |
-| C-x h         | mark-whole-buffer          | 全選              |
-| M-g g         | goto-line                  | 跳到指定行號      |
-| S-<UP>/<Down> | org-shiftup                | 單格移動          |
-| M-<UP>/<Down> | org-metaup                 | 單行移動          |
-| M-d           | kill-word                  | delete one word   |
-| C-w           | kill-region                | delete one line   |
-| C-k           | kill-line                  | delete one line   |
-| M-w           | easy-kill                  | copy              |
-| C-y           | yank                       | paste             |
-| M-%           | query-replace              | query and replace |
-| M-<           | beginning-of-buffer        |                   |
-| M->           | end-of-buffer              |                   |
-| C-x <SPC>     | rectangle-mark-mode        | 垂直選取          |
-| C-@           | set-mark-command           |                   |
-| C-x r-t       | string-rectangle           |                   |
-| C-(           | kmacro-start-macro         |                   |
-| C-)           | kmacro-end-macro           |                   |
-| C-x u         | undo                       |                   |
-| C-f C-/       | redo                       |                   |
-
-** [[https://orgmode.org][Org Mode]]
-
-| Key Binding | Command                  | Description                       |
-|-------------+--------------------------+-----------------------------------|
-| C-c C-t     | org-todo                 | change the TODO state of an item. |
-| C-c C-s     | org-schedule             | Insert the SCHEDULED.             |
-| C-c C-d     | org-deadline             | Insert the DEADLINE               |
-| C-c [       | org-agenda-file-to-front |                                   |
-|             | org-agenda               |                                   |
-| C-c C-e     | org-export               |                                   |
-
-*** [[https://emacs.stackexchange.com/questions/4279/exporting-from-org-mode-to-markdown][Exporting from org-mode to markdown]]
-
-You should customize *org-export-backends* and enable the markdown backend.
-
-*M-x customize-option* and then *org-export-backends* and then arrow down to the checkbox to the left of 'md' and press enter to enable it (or just click on it, if running emacs graphically). Then arrow back up and over to 'Apply and Save' (or click on it).
-
-After customizing, run *M-x org-md-export-to-markdown*. Now you should have a new markdown file in the same directory which is an export of the original org mode file.
-
-** [[https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html][Org-mode 简明手册]]
-
-
 * rails
 
 ** Ruby on Rails自習手冊
