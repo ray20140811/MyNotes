@@ -1,5 +1,7 @@
 * Emacs
 
+** [[https://github.com/emacs-tw/emacs-101-beginner-survival-guide][Emacs 101 新手求生指南]]
+
 ** Basic Command
 
 | Key Binding   | Command                    | Description       |
@@ -30,6 +32,186 @@
 | C-x u         | undo                       |                   |
 | C-f C-/       | redo                       |                   |
 
+
+** Tips
+
+*** [[https://emacs.stackexchange.com/questions/64371/org-mode-open-link-in-browser-directly][org mode open link in browser directly]]
+
+M-x org-open-at-point
+
+*** [[https://stackoverflow.com/questions/7038146/how-can-i-compare-two-files-in-emacs-similar-to-vims-vimdiff][How can I compare two files in emacs, similar to vim's vimdiff?]]
+
+M-x ediff
+
+To get side-by-side diffs:
+
+(setq ediff-split-window-function 'split-window-horizontally)
+
+*** How can I compare two buffers in emacs?
+
+M-x ediff-buffers
+
+*** [[https://ftp.gnu.org/old-gnu/Manuals/emacs-20.7/html_node/emacs_153.html][How can I create new buffer in emacs?]]
+
+C-x b bufname RET
+
+*** 如何綁定某功能至某按鍵
+
+(global-set-key (kbd "<f5>") 'browse-url-of-file)
+
+*** [[https://emacs.stackexchange.com/questions/278/how-do-i-display-line-numbers-in-emacs-not-in-the-mode-line][如何啟動時就顯示行號]]
+
+init.el 增加
+
+#+BEGIN_QUOTE
+(global-display-line-numbers-mode)
+#+END_QUOTE
+
+或是
+
+#+BEGIN_QUOTE
+(global-linum-mode)
+#+END_QUOTE
+
+*** [[https://www.cnblogs.com/hfww/p/16172297.html][Emacs org mode中表格有中文字時,無法對齊]]
+
+安裝插件:
+
+#+begin_src
+  M-x package-install RET valign RET
+#+end_src
+
+修改配置文件:
+
+~/.emacs.d/init.el
+
+#+begin_src
+(add-hook 'org-mode-hook #'valign-mode)
+#+end_src
+
+插件名稱: valign
+網址: https://github.com/casouri/valign
+
+*** rsync packages
+
+$ mkdir ~/.emacs.d/melpa
+$ cd ~/.emacs.d/melpa
+$ rsync -avz rsync://stable.melpa.org/packages .
+
+init.el
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "~/.emacs.d/melpa") t)
+(package-initialize)
+
+*** [[https://emacs.stackexchange.com/questions/33/put-all-backups-into-one-backup-folder][Put all backups into one backup folder]]
+
+**** Easy Way
+
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup-list")))
+
+
+**** Smart Way
+
+;; Put backup files neatly away
+(let ((backup-dir "~/.emacs.d/backup-list")
+      (auto-saves-dir "~/.emacs.d/auto-save-list/"))
+  (dolist (dir (list backup-dir auto-saves-dir))
+    (when (not (file-directory-p dir))
+      (make-directory dir t)))
+  (setq backup-directory-alist `(("." . ,backup-dir))
+        auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
+        auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
+        tramp-backup-directory-alist `((".*" . ,backup-dir))
+        tramp-auto-save-directory auto-saves-dir))
+
+(setq backup-by-copying t    ; Don't delink hardlinks
+      delete-old-versions t  ; Clean up the backups
+      version-control t      ; Use version numbers on backups,
+      kept-new-versions 5    ; keep some new versions
+      kept-old-versions 2)   ; and some old ones, too
+
+*** [[https://emacs.stackexchange.com/questions/392/how-to-change-the-cursor-type-and-color][How to change cursor type and color?]]
+
+(setq-default cursor-type 'bar)
+
+(set-cursor-color "#ffffff")
+
+*** How to hide the welcome screen?
+
+(setq inhibit-startup-screen t)
+
+*** [[https://stackoverflow.com/questions/2035678/how-to-open-files-in-web-browsers-e-g-firefox-within-editors-like-vim-or-emacs][How to open files in web browsers (e.g Firefox) within editors like vim or emacs?]]
+
+M-x browse-url-of-file
+
+*** auto-format
+
+|-------------------+-------|
+| Command           | Key   |
+|-------------------+-------|
+| mark-whole-buffer | C-x-h |
+| indent-region     | C-M-\ |
+|-------------------+-------|
+
+*** rectangle-number-lines
+
+**** exercise
+
+before:
+
+#+begin_example
+aaa
+aaa
+aaa
+aaa
+aaa
+#+end_example
+
+result:
+
+#+begin_example
+1 aaa
+2 aaa
+3 aaa
+4 aaa
+5 aaa
+#+end_example
+
+*** window-swap-states
+
+*** macro
+
+|---------+-------+----------------------------------------------------------|
+| Command | Key   | Description                                              |
+|---------+-------+----------------------------------------------------------|
+|         | F3    | Start defining a keyboard macro                          |
+|         | C-x ( | same as F3                                               |
+|         | F4    | If a keyboard macro is being defined, end the definition |
+|         | C-x ) | same as F4                                               |
+|         | C-x e | If a keyboard macro is being defined, end the definition |
+|---------+-------+----------------------------------------------------------|
+
+**** exercise
+
+before:
+
+#+begin_example
+aaa
+aaa
+aaa
+#+end_example
+
+result:
+
+#+begin_example
+- aaa
+- aaa
+- aaa
+#+end_example
+
+
+
 ** [[https://orgmode.org][Org Mode]]
 
 | Key Binding | Command                  | Description                       |
@@ -38,8 +220,10 @@
 | C-c C-s     | org-schedule             | Insert the SCHEDULED.             |
 | C-c C-d     | org-deadline             | Insert the DEADLINE               |
 | C-c [       | org-agenda-file-to-front |                                   |
-|             | org-agenda               |                                   |
+| C-c a       | org-agenda               |                                   |
+| C-c / t     | org-sparse-tree          |                                   |
 | C-c C-e     | org-export               |                                   |
+| M-S <RET>   | org-insert-todo-heading  |                                   |
 
 *** [[https://emacs.stackexchange.com/questions/4279/exporting-from-org-mode-to-markdown][Exporting from org-mode to markdown]]
 
@@ -49,4 +233,48 @@ You should customize *org-export-backends* and enable the markdown backend.
 
 After customizing, run *M-x org-md-export-to-markdown*. Now you should have a new markdown file in the same directory which is an export of the original org mode file.
 
+
 ** [[https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html][Org-mode 简明手册]]
+
+*** 待辦事項
+
+**** 使用 TODO 狀態
+
+**** 多狀態工作流程
+
+(setq org-todo-keywords '((sequence "TODO" "PENDING" "DONE")))
+
+
+** GNU Emacs Manual
+
+*** sort-lines
+
+z this is line a
+y this is line bb
+x this is line ccc
+a this is line xxx
+b this is line yy
+c this is line z
+
+a this is line xxx
+b this is line yy
+c this is line z
+x this is line ccc
+y this is line bb
+z this is line a
+
+
+** Package
+
+*** [hl-todo](https://github.com/tarsius/hl-todo)
+
+(setq hl-todo-keyword-faces
+      '(("TODO"   . "#FF0000")
+        ("FIXME"  . "#FF0000")
+        ("DEBUG"  . "#A020F0")
+        ("GOTCHA" . "#FF4500")
+        ("STUB"   . "#1E90FF")))
+
+M-x hl-todo-mode
+
+*** [consult](https://github.com/minad/consult)
