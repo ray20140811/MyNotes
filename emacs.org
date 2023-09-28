@@ -35,6 +35,15 @@
 
 ** Tips
 
+*** How to add melpa
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+;; and `package-pinned-packages`. Most users will not need or want to do this.
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(package-initialize)
+
 *** [[https://emacs.stackexchange.com/questions/4279/exporting-from-org-mode-to-markdown][Exporting from org-mode to markdown]]
 
 You should customize org-export-backends and enable the markdown backend.
@@ -187,7 +196,6 @@ result:
 #+end_example
 
 *** window-swap-states
-
 *** macro
 
 |---------+-------+----------------------------------------------------------|
@@ -255,6 +263,31 @@ After customizing, run *M-x org-md-export-to-markdown*. Now you should have a ne
 
 ** GNU Emacs Manual
 
+*** Inserting Text
+
+C-j
+    inserts just a newline, without any auto-indentation
+
+C-q <non-graphic character>
+    insert a non-graphic character, or a character that your keyboard does not support
+
+C-q <a sequence of octal digits>
+    inserts the character with the specified octal character code
+    eg. C-q 101 <RET> insert 'A'
+
+C-x 8 <RET>
+
+
+*** Macro
+
+| kmacro-start-macro-or-insert-counter | <F3>            | Start defining a keyboard macro                                                   |
+| kmacro-end-or-call-macro             | <F4>            | End the definition of a keyboard macro. Or execute the most recent keyboard macro |
+|                                      | C-u <F3>        | Re-execute last keyboard macro, then append keys to its definition                |
+|                                      | C-u C-u <F3>    | Append keys to the last keyboard macro without re-executing it                    |
+|                                      | M-<number> <F4> | invoke the macro 'n' times                                                        |
+|                                      | M-0             | repeats the macro indefinitely, until it gets an error or you type 'C-g'          |
+
+
 *** sort-lines
 
 z this is line a
@@ -274,6 +307,64 @@ z this is line a
 
 ** Package
 
+*** [[https://magit.vc/manual/magit/Getting-Started.html][magit]]
+
+|------------------+---------+------------------------------------------------------|
+| command          | key     | description                                          |
+|------------------+---------+------------------------------------------------------|
+|                  | C-x g   | display information about the current Git repository |
+|                  | p       | move between sections                                |
+|                  | n       | move between sections                                |
+|                  | g       | refresh                                              |
+|                  | C-tab   | cycle the visibility of the current section          |
+|                  | s       | stage the changes                                    |
+|                  | u       | unstage the changes                                  |
+| set-mark-command | C-SPC   | set the mark                                         |
+|                  | c       | commit the changes                                   |
+|                  | C-c C-c | actually create the commit                           |
+|                  | P       | show all the available push commands                 |
+|                  | p       | push a brach                                         |
+|                  | h       | show a menu that lists all other menus               |
+|                  | h d     | bring up the diff menu                               |
+|                  | C-x M-g | non-Magit buffer                                     |
+|------------------+---------+------------------------------------------------------|
+
+
+
+*** neotree
+
+**** Installation
+
+- Clone project
+
+  #+BEGIN_SRC
+  $ cd /some/path
+  $ git clone https://github.com/jaypei/emacs-neotree.git neotree
+  #+END_SRC
+
+- Add config:
+
+  #+BEGIN_SRC
+  (add-to-list 'load-path "/some/path/neotree")
+  (require 'neotree)
+  (global-set-key [f8] 'neotree-toggle)
+  #+END_SRC
+
+- Open NeoTree
+
+  <F8>
+
+
+**** Usage
+
+|---------------------+---------+------------------------------|
+| Command             | Key     | Description                  |
+|---------------------+---------+------------------------------|
+| neotree-copy-node   | C-c C-p | Copy a file or a directory   |
+| neotree-rename-node | C-c C-r | Rename a file or a directory |
+| neotree-delete-node | C-c C-d | Delete a file or a directory |
+|---------------------+---------+------------------------------|
+
 *** [hl-todo](https://github.com/tarsius/hl-todo)
 
 (setq hl-todo-keyword-faces
@@ -286,3 +377,18 @@ z this is line a
 M-x hl-todo-mode
 
 *** [consult](https://github.com/minad/consult)
+*** [zygospore](https://github.com/LouisKottmann/zygospore.el)
+
+
+* Lisp
+** [[https://www.csie.ntu.edu.tw/~course/10420/Resources/lp/][Lisp Primer]]
+** [[https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html][Common Lisp the Language, 2nd Edition]]
+** [[https://lisp-lang.org/][Lisp-lang.org - Common Lisp]]
+** [[https://common-lisp.net/][Common-Lisp.net]]
+** [[https://acl.readthedocs.io/en/latest/][ANSI Common Lisp]]
+** [[https://gigamonkeys.com/book/][Practical Common Lisp]]
+
+
+* Blog
+
+- [[https://tuhdo.github.io/index.html][Emacs mini manual series]]
